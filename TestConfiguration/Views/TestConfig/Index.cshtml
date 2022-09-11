@@ -1,0 +1,103 @@
+﻿@model IEnumerable<TestConfiguration.Models.TestConfig>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AdmissionReferenceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BatchId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SesionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinimumGPA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PassMark)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AdmissionReferenceId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SesionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinimumGPA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PassMark)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a href="#" onclick="deleteItem(@item.Id)">Delete</a>
+                </td>
+            </tr>
+            @foreach (var childItem in item.TestConfigDetails)
+            {
+                <tr class="sld bg-success">
+                    <td colspan="6"><p>@childItem.SubjectId @childItem.ResultGradeId</p></td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            console.log("Hello");
+            $('tr').click(function(){
+                 console.log("Helloss");
+                 //$('td p').siblings('p').slideToggle();
+                $(this).siblings('tr').slideToggle();
+            });
+                    
+
+        });
+
+        function deleteItem(id){
+            var confirmMsg = confirm(`Do you want delete Entity(${id})`);
+            if(confirmMsg == true){
+                $.ajax({
+                    type: "POST",
+                    url : "/TestConfig/Delete/"+id,
+                    data: id,
+                    dataType: 'json',
+                    success: function(){
+                        console.log("Entiy is deleted successfully");
+                    },
+                    Error: function(errorMsg){
+                        console.log(errorMsg.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}

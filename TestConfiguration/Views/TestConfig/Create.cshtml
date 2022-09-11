@@ -1,0 +1,236 @@
+﻿@model TestConfiguration.Models.TestConfig
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TestConfig</h4>
+<hr />
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Create" id="TestConfigForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AdmissionReferenceId" class="control-label"></label>
+                <input asp-for="AdmissionReferenceId" class="form-control" />
+                <span asp-validation-for="AdmissionReferenceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatchId" class="control-label"></label>
+                <input asp-for="BatchId" class="form-control" />
+                <span asp-validation-for="BatchId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SesionId" class="control-label"></label>
+                <input asp-for="SesionId" class="form-control" />
+                <span asp-validation-for="SesionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimumGPA" class="control-label"></label>
+                <input asp-for="MinimumGPA" class="form-control" />
+                <span asp-validation-for="MinimumGPA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PassMark" class="control-label"></label>
+                <input asp-for="PassMark" class="form-control" />
+                <span asp-validation-for="PassMark" class="text-danger"></span>
+            </div>
+            <div class="col-md-12">
+                <table id="ExpTable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.TestConfigDetails.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="form-check activeEnable_@i" />
+                                </td>
+
+
+                                <td>
+                                    @*<input type="checkbox" class="form-check activeEnable_@i" />*@
+                                    <select class="form-control" id="SubjectId_@i" asp-for="@Model.TestConfigDetails[@i].SubjectId">
+                                        @*<select class="form-control" id="SubjectId_@i" name="TestConfigDetails[@i].SubjectId" asp-for="TestConfigDetails[@i].SubjectId" disabled>*@
+                                        <option value="-1">Choose Option</option>
+                                        <option value="1">Bangla</option>
+                                        <option value="2">English</option>
+                                    </select>
+
+                                    @*<input type="text" class="form-control" asp-for="@Model.TestConfigDetails[i].SubjectId"/>*@
+                                </td>
+
+                                <td>
+                                    @*<input type="checkbox" class="form-check activeEnable_@i" />*@
+                                    <select class="form-control" id="ResultGradeId_@i" asp-for="@Model.TestConfigDetails[@i].ResultGradeId">
+                                        @*<select class="form-control" id="ResultGradeId_@i" name="TestConfigDetails[@i].ResultGradeId" disabled>*@
+                                        <option value="-1">Choose Option</option>
+                                        <option value="1">A+</option>
+                                        <option value="2">A</option>
+                                    </select>
+                                    @*<input type="text" class="form-control"   asp-for="@Model.TestConfigDetails[i].ResultGradeId"/>*@
+                                </td>
+                                <td>
+                                    <a id="btnAdd-@i" class="btn btn-sm btn-info visible" onclick="addItem(this)">Add</a>
+                                    <a id="btnRemove-@i" class="btn btn-sm btn-danger visible" onclick="deleteItem(this)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+           <input type="hidden" id="hdnLastIndex" value="0" />
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        //$.fn.myFunc = function ($this) {
+        //    if ($this.is(":checked")) {
+        //        $this.siblings("select").removeAttr('disabled');
+        //        console.log("if checked");
+        //    }
+        //    else
+        //        $this.siblings("select").attr('disabled', 'disabled');
+        //}
+
+        //$(".activeEnable_0").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+        //$(".activeEnable_1").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+        //$(".activeEnable_2").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+
+        //$(".activeEnable_3").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+
+        //$(".activeEnable_4").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+        //$(".activeEnable_5").change(function () {
+        //    $.fn.myFunc($(this));
+        //});
+
+        // Delete row function
+        function deleteItem(btn) {
+
+            var table = document.getElementById('ExpTable');
+
+            var rows = table.getElementsByTagName('tr');
+
+            if(rows.length == 2){
+                alert("This Row Cannot be Deleted");
+                return;
+            }
+
+            $(btn).closest('tr').remove();
+        };
+
+        // New Row insert function
+ 
+        function addItem(btn) {
+            var table = document.getElementById('ExpTable');
+
+            var rows = table.getElementsByTagName('tr');
+
+            var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+            // Replace operation
+
+            var lastRowIndex = document.getElementById('hdnLastIndex').value;  // for change the last added row's attribute index
+
+            var nextRowIndex = eval(lastRowIndex) + 1;   // previous index replace by this index
+
+            document.getElementById('hdnLastIndex').value = nextRowIndex;
+
+            rowOuterHtml = rowOuterHtml.replaceAll('_' + lastRowIndex + '_', '_' + nextRowIndex + '_');
+
+            rowOuterHtml = rowOuterHtml.replaceAll('[' + lastRowIndex + ']', '[' + nextRowIndex + ']');
+
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastRowIndex , '-' + nextRowIndex);
+
+            // Replace operation end
+
+
+            var newRow = table.insertRow();
+
+            newRow.innerHTML = rowOuterHtml;
+
+            //delete Button Visible and Invisible
+
+            var btnAddId = btn.id;          // Add Button Id
+
+            console.log(btnAddId);
+
+            var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
+
+            console.log(btnDeleteId);
+
+            var dltBtn = document.getElementById(btnDeleteId);
+
+            console.log(dltBtn);
+
+            dltBtn.classList.add('visible');
+
+            dltBtn.classList.remove('invisible');
+
+            var addBtn = document.getElementById(btnAddId);
+
+            console.log(addBtn);
+
+            addBtn.classList.remove('visible');
+
+            addBtn.classList.add('invisible');
+
+            // call the jquery validation
+            rebindValidators();
+        }
+
+        // Function for dynamic inserted row client side validation
+
+        function rebindValidators(){
+
+            var $form = $("#TestConfigForm");
+
+            $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
+
+            $form.data("validator", null);  // this will clear all the validators from the form
+
+            $.validator.unobtrusive.parse($form);  // this will add the validators to the form again
+
+            $form.validate($form.data("unobtrusiveValidation"),options);
+        }
+
+    </script>
+    }
