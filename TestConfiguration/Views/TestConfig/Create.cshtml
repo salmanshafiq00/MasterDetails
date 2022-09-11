@@ -191,23 +191,15 @@
 
             var btnAddId = btn.id;          // Add Button Id
 
-            console.log(btnAddId);
-
             var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
 
-            console.log(btnDeleteId);
-
             var dltBtn = document.getElementById(btnDeleteId);
-
-            console.log(dltBtn);
 
             dltBtn.classList.add('visible');
 
             dltBtn.classList.remove('invisible');
 
             var addBtn = document.getElementById(btnAddId);
-
-            console.log(addBtn);
 
             addBtn.classList.remove('visible');
 
