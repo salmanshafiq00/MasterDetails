@@ -50,31 +50,23 @@
                         {
                             <tr>
                                 <td>
-                                    <input type="checkbox" class="form-check activeEnable_@i" />
-                                </td>
-
-
-                                <td>
-                                    @*<input type="checkbox" class="form-check activeEnable_@i" />*@
-                                    <select class="form-control" id="SubjectId_@i" asp-for="@Model.TestConfigDetails[@i].SubjectId">
-                                        @*<select class="form-control" id="SubjectId_@i" name="TestConfigDetails[@i].SubjectId" asp-for="TestConfigDetails[@i].SubjectId" disabled>*@
+                                    <select class="form-control"  asp-for="@Model.TestConfigDetails[@i].SubjectId">
                                         <option value="-1">Choose Option</option>
                                         <option value="1">Bangla</option>
                                         <option value="2">English</option>
                                     </select>
+                                    <span asp-validation-for="@Model.TestConfigDetails[@i].SubjectId" class="text-danger"></span>
 
-                                    @*<input type="text" class="form-control" asp-for="@Model.TestConfigDetails[i].SubjectId"/>*@
                                 </td>
 
                                 <td>
-                                    @*<input type="checkbox" class="form-check activeEnable_@i" />*@
-                                    <select class="form-control" id="ResultGradeId_@i" asp-for="@Model.TestConfigDetails[@i].ResultGradeId">
-                                        @*<select class="form-control" id="ResultGradeId_@i" name="TestConfigDetails[@i].ResultGradeId" disabled>*@
+                                    <select class="form-control" asp-for="@Model.TestConfigDetails[@i].ResultGradeId">
                                         <option value="-1">Choose Option</option>
                                         <option value="1">A+</option>
                                         <option value="2">A</option>
                                     </select>
-                                    @*<input type="text" class="form-control"   asp-for="@Model.TestConfigDetails[i].ResultGradeId"/>*@
+                                    <span asp-validation-for="@Model.TestConfigDetails[@i].ResultGradeId" class="text-danger"></span>
+
                                 </td>
                                 <td>
                                     <a id="btnAdd-@i" class="btn btn-sm btn-info visible" onclick="addItem(this)">Add</a>
@@ -116,31 +108,6 @@
         //        $this.siblings("select").attr('disabled', 'disabled');
         //}
 
-        //$(".activeEnable_0").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
-
-        //$(".activeEnable_1").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
-
-        //$(".activeEnable_2").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
-
-
-        //$(".activeEnable_3").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
-
-
-        //$(".activeEnable_4").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
-
-        //$(".activeEnable_5").change(function () {
-        //    $.fn.myFunc($(this));
-        //});
 
         // Delete row function
         function deleteItem(btn) {
@@ -213,7 +180,7 @@
 
         function rebindValidators(){
 
-            var $form = $("#TestConfigForm");
+            var $form = $("#TestConfigForm");  // formId
 
             $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
 

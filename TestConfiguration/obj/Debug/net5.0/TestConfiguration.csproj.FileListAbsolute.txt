@@ -144,3 +144,5 @@ E:\Visual  Studio\TestConfiguration\TestConfiguration\bin\Debug\net5.0\runtimes\
 E:\Visual  Studio\TestConfiguration\TestConfiguration\obj\Debug\net5.0\Razor\Views\TestConfig\Index.cshtml.g.cs
 E:\Visual  Studio\TestConfiguration\TestConfiguration\obj\Debug\net5.0\Razor\Views\TestConfig\Create.cshtml.g.cs
 E:\Visual  Studio\TestConfiguration\TestConfiguration\obj\Debug\net5.0\Razor\Views\TestConfig\Edit.cshtml.g.cs
+E:\Visual  Studio\TestConfiguration\TestConfiguration\obj\Debug\net5.0\Razor\Views\TestConfig\Create2.cshtml.g.cs
+E:\Visual  Studio\TestConfiguration\TestConfiguration\bin\Debug\net5.0\FluentValidation.dll

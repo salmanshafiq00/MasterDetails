@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "AFFUe30t5gEkIrhAwi/GTil8syhglaV/vKvRyzjTowH9jpKv7eLaD/NZAWGPptWOb7zt009JwnVLuowq8zqf7Q==",
+  "dgSpecHash": "KkCX6npxnh4yD0sYW/uKjlff8Tp1Y9aa22oh1LfKMsK1a9WevBsPOcfVzhyn0TURhcitGiM4fwYd2AVWMyX0mQ==",
   "success": true,
   "projectFilePath": "E:\\Visual  Studio\\TestConfiguration\\TestConfiguration\\TestConfiguration.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\salman\\.nuget\\packages\\fluentvalidation\\11.2.2\\fluentvalidation.11.2.2.nupkg.sha512",
     "C:\\Users\\salman\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\salman\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\salman\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",

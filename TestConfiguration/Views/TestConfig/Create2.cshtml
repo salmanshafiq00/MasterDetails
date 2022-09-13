@@ -1,0 +1,163 @@
+﻿@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cName = requestCulture.RequestCulture.Culture.Name;
+
+}
+@model TestConfigViewModel
+
+<form id="create-form" method="post" onsubmit="return jQueryModalPost(this);" enctype="multipart/form-data">
+    <input type="hidden" value="@cName" name="Local" />
+    <input type="hidden" asp-for="Id" name="Id">
+    <div class="form-group row px-2">
+        <div class="col-md-6">
+            <div class="form-group ">
+                @(await Component.InvokeAsync<AdmissionRefViewComponent>(new { selectedId = "AdmissionReferenceId", admissionId = Model.AdmissionReferenceId, labelclass = "text-right" }))
+                <span asp-validation-for="AdmissionReferenceId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @(await Component.InvokeAsync<BatchViewComponent>(new { selectedId = "BatchId", batchId = Model.BatchId, labelclass = "text-right" }))
+        </div>
+        <div class="col-md-6">
+            @(await Component.InvokeAsync<SessionsViewComponent>(new { selectedId = "SessionId", sessionId = Model.SessionId, labelclass = "text-right" }))
+
+        </div>
+    </div>
+    <div class="form-group row px-2">
+        <div class="col-md-6">
+            <div class="form-group ">
+                <label class="form-label"> @localizer[LocalizerConstant.MINIMUM_GPA]: </label>
+                <input type="text" asp-for="MinimumGPA" name="MinimumGPA" class="form-control">
+                <span asp-validation-for="MinimumGPA" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group ">
+                <label class="form-label"> @localizer[LocalizerConstant.PASS_MARK]: </label>
+                <input type="text" asp-for="PassMark" name="PassMark" class="form-control">
+                <span asp-validation-for="PassMark" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        @for (int i = 0; i < Model.TestConfigDetails.Count; i++)
+        {
+            <div class="col-md-6">
+                <div class="row form-group">
+                    <input type="hidden" asp-for="@Model.TestConfigDetails[i].Id">
+                    <input type="hidden" asp-for="@Model.TestConfigDetails[i].TestConfigId">
+                    <div class="col-md-8">
+                        <input type="checkbox" class="form-check-input" id="checkForActive_@i" style="margin-left: 1px; margin-top: 13px;">
+                        @(await Component.InvokeAsync<SubjectViewComponent>(new { selectedId = $"SubjectId_{i}", subjectId = Model.TestConfigDetails[i].SubjectId, labelclass = "text-right" }))
+                    </div>
+                    <div class="col-md-4">
+                        @(await Component.InvokeAsync<ResultGradeViewComponent>(new { selectedId = $"ResultGradeId_{i}", resultGradeId = Model.TestConfigDetails[i].ResultGradeId, labelclass = "text-right" }))
+                        @*<span asp-validation-for="PassMark" class="text-danger"></span>*@
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+
+    <div class="row px-2">
+        <a class="btn" style="background-color: #012766 ; color: white; width:100%; margin-top:10px; margin-left: 7px; margin-right: 7px ">Save</a>
+    </div>
+</form>
+<script type="text/javascript" language=javascript>
+    $.validator.unobtrusive.parse(document);
+</script>
+
+<script>
+    $(document).ready(function () {
+
+
+        $.fn.toggleDisableSelect = function ($this) {
+            if ($this.is(":checked")) {
+                $this.siblings("select").removeAttr('disabled');
+                $this.parent('.col-md-8').siblings('.col-md-4').find('select').removeAttr('disabled');
+            }
+            else {
+                $this.siblings("select").attr('disabled', 'disabled');
+                $this.siblings("select").val("-1");
+                $this.parent('.col-md-8').siblings('.col-md-4').find('select').attr('disabled', 'disabled');
+                $this.parent('.col-md-8').siblings('.col-md-4').find('select').val("-1");
+            }
+        }
+
+        $("#checkForActive_0").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+        $("#checkForActive_1").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+
+        $("#checkForActive_2").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+
+        $("#checkForActive_3").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+
+        $("#checkForActive_4").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+
+        $("#checkForActive_5").change(function () {
+            $.fn.toggleDisableSelect($(this));
+        });
+
+
+        $(".btn").click(function () {
+
+            var id = $("#Id").val();
+            var admissionReferencedId = $("#AdmissionReferenceId").val();
+            var batchId = $("#BatchId").val();
+            var sessionId = $("#SessionId").val();
+            var minimumGPA = $("#MinimumGPA").val();
+            var passMark = $("#PassMark").val();
+
+            var model = {
+                Id: id, AdmissionReferenceId: admissionReferencedId, BatchId: batchId, SessionId: sessionId, MinimumGPA: minimumGPA, PassMark: passMark, TestConfigDetails: [
+                    { Id: $("#TestConfigDetails_0__Id").val(), TestConfigId: $("#TestConfigDetails_0__TestConfigId").val(), SubjectId: $("#SubjectId_0").val(), ResultGradeId: $("#ResultGradeId_0").val() },
+                    { Id: $("#TestConfigDetails_1__Id").val(), TestConfigId: $("#TestConfigDetails_1__TestConfigId").val(), SubjectId: $("#SubjectId_1").val(), ResultGradeId: $("#ResultGradeId_1").val() },
+                    { Id: $("#TestConfigDetails_2__Id").val(), TestConfigId: $("#TestConfigDetails_2__TestConfigId").val(), SubjectId: $("#SubjectId_2").val(), ResultGradeId: $("#ResultGradeId_2").val() },
+                    { Id: $("#TestConfigDetails_3__Id").val(), TestConfigId: $("#TestConfigDetails_3__TestConfigId").val(), SubjectId: $("#SubjectId_3").val(), ResultGradeId: $("#ResultGradeId_3").val() },
+                    { Id: $("#TestConfigDetails_4__Id").val(), TestConfigId: $("#TestConfigDetails_4__TestConfigId").val(), SubjectId: $("#SubjectId_4").val(), ResultGradeId: $("#ResultGradeId_4").val() },
+                    { Id: $("#TestConfigDetails_5__Id").val(), TestConfigId: $("#TestConfigDetails_5__TestConfigId").val(), SubjectId: $("#SubjectId_5").val(), ResultGradeId: $("#ResultGradeId_5").val() }]
+            };
+
+            console.log(model);
+
+            $.ajax({
+                type: 'POST',
+                url: '/admission/TestConfig/OnPostCreateOrEdit',
+                data: JSON.stringify(model),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                processData: false,
+                success: function (res) {
+                    console.log(res);
+                    if (res.isValid) {
+                        $('#viewAll').html(res.html)
+                        $('#form-modal').modal('hide');
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+
+        });
+
+    });
+
+
+</script>
