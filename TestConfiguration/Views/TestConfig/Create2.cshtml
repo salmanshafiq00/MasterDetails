@@ -1,8 +1,7 @@
-﻿@{
+﻿@*@{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var cName = requestCulture.RequestCulture.Culture.Name;
 
-}
 @model TestConfigViewModel
 
 <form id="create-form" method="post" onsubmit="return jQueryModalPost(this);" enctype="multipart/form-data">
@@ -52,7 +51,7 @@
                     </div>
                     <div class="col-md-4">
                         @(await Component.InvokeAsync<ResultGradeViewComponent>(new { selectedId = $"ResultGradeId_{i}", resultGradeId = Model.TestConfigDetails[i].ResultGradeId, labelclass = "text-right" }))
-                        @*<span asp-validation-for="PassMark" class="text-danger"></span>*@
+                        <span asp-validation-for="PassMark" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -161,3 +160,4 @@
 
 
 </script>
+*@

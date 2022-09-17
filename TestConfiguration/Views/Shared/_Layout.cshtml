@@ -31,6 +31,39 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+
+            <div class="modal fade" id="congratesModal" role="dialog" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <img src="~/Images/successImage.png" width="225" height="250" asp-append-version style="display:block; margin-left: auto; margin-right: auto" />
+                            <h2 style="font-weight: 900;font-size: 24px; text-align: center;color: #3160B9;">
+                                Congratulations!
+                            </h2>
+                            <p style="text-align: center;color: #666666;font-weight: 400;font-size: 16px;">
+                                Application Has been Successful. Your Application ID and
+                                Password are given bellow
+                            </p>
+                            <div>
+                                <div style="background: #F2F7FF; border-radius: 5px;" class="row">
+                                    <div class="col-md-6" style="font-weight: 400; font-size: 16px; color: #666666;">
+                                        <label>Application ID</label>
+                                        <span class="text-end">:</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label style="font-weight: 700; font-size: 16px; color: #112140;">221478DDG6</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Understood</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             @RenderBody()
         </main>
     </div>

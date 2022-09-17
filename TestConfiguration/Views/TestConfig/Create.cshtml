@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var configDetail = ViewBag.TestConfigDetails;
 }
 
 <h1>Create</h1>
@@ -10,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-7">
-        <form asp-action="Create" id="TestConfigForm">
+        <form asp-action="Create" id="TestConfigForm" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="AdmissionReferenceId" class="control-label"></label>
@@ -46,11 +47,54 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 0; i < Model.TestConfigDetails.Count; i++)
+                        @for (int i = 0; i < Model.TestConfigDetails.Count - 2; i++)
                         {
                             <tr>
                                 <td>
-                                    <select class="form-control"  asp-for="@Model.TestConfigDetails[@i].SubjectId">
+                                    <select class="form-control" asp-for="@Model.TestConfigDetails[@i].SubjectId">
+                                        <option value="-1">Choose Option</option>
+                                        <option value="1">Bangla</option>
+                                        <option value="2">English</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.TestConfigDetails[@i].SubjectId" class="text-danger"></span>
+
+                                </td>
+
+                                <td>
+                                    <select class="form-control" asp-for="@Model.TestConfigDetails[@i].ResultGradeId">
+                                        <option value="-1">Choose Option</option>
+                                        <option value="1">A+</option>
+                                        <option value="2">A</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.TestConfigDetails[@i].ResultGradeId" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <a id="btnAdd-@i" class="btn btn-sm btn-info visible" onclick="addItem(this)">Add</a>
+                                    <a id="btnRemove-@i" class="btn btn-sm btn-danger visible" onclick="deleteItem(this)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+            <input type="hidden" id="hdnLastIndex" value="1" />
+
+            <div class="col-md-12">
+                <table id="ExpTable2">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 2; i < Model.TestConfigDetails.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select class="form-control" asp-for="@Model.TestConfigDetails[@i].SubjectId">
                                         <option value="-1">Choose Option</option>
                                         <option value="1">Bangla</option>
                                         <option value="2">English</option>
@@ -69,18 +113,22 @@
 
                                 </td>
                                 <td>
-                                    <a id="btnAdd-@i" class="btn btn-sm btn-info visible" onclick="addItem(this)">Add</a>
-                                    <a id="btnRemove-@i" class="btn btn-sm btn-danger visible" onclick="deleteItem(this)">Delete</a>
+                                    <a id="btnAddHsc-@i" class="btn btn-sm btn-info visible" onclick="addItemHsc(this)">Add</a>
+                                    <a id="btnRemoveHsc-@i" class="btn btn-sm btn-danger visible" onclick="deleteItemHsc(this)">Delete</a>
                                 </td>
                             </tr>
                         }
-
                     </tbody>
                 </table>
-
             </div>
-           <input type="hidden" id="hdnLastIndex" value="0" />
+            <input type="hidden" id="hdnLastIndex2" value="3" />
 
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" asp-for="ProfileImage">
+                    <label class="custom-file-label" for="ProfileImage">Choose file</label>
+                </div>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -99,6 +147,32 @@
 
     <script>
 
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+
+            var msg = "@TempData["Success"]";
+            if(msg){
+                openCongratesModel(msg);
+            }
+
+        });
+
+        var _URL = window.URL || window.webkitURL;
+        $("#ProfileImage").change(function (e) {
+            var file, img;
+            if ((file = this.files[0])) {
+                img = new Image();
+                var objectUrl = _URL.createObjectURL(file);
+                img.onload = function () {
+                    alert(this.width + " " + this.height);
+                    _URL.revokeObjectURL(objectUrl);
+                };
+                img.src = objectUrl;
+            }
+        });
         //$.fn.myFunc = function ($this) {
         //    if ($this.is(":checked")) {
         //        $this.siblings("select").removeAttr('disabled');
@@ -116,16 +190,16 @@
 
             var rows = table.getElementsByTagName('tr');
 
-            if(rows.length == 2){
+            if (rows.length == 2) {
                 alert("This Row Cannot be Deleted");
                 return;
             }
 
-            $(btn).closest('tr').remove();
+            $(btn).closest('tr').hide();
         };
 
         // New Row insert function
- 
+
         function addItem(btn) {
             var table = document.getElementById('ExpTable');
 
@@ -145,10 +219,35 @@
 
             rowOuterHtml = rowOuterHtml.replaceAll('[' + lastRowIndex + ']', '[' + nextRowIndex + ']');
 
-            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastRowIndex , '-' + nextRowIndex);
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastRowIndex, '-' + nextRowIndex);
+
+            // Second Loop
+            var table2 = document.getElementById('ExpTable2');
+
+            var rows2 = table2.getElementsByTagName('tr');
+
+            // Replace operation
+
+            //var newRow;
+
+            for (var i = 1; i < rows2.length; i++) {
+                var newRow = rows2[i].outerHTML;
+
+                newRow = newRow.replaceAll('_' + nextRowIndex + '__', '_' + eval(nextRowIndex + 1) + '__');
+
+                newRow = newRow.replaceAll('[' + nextRowIndex + ']', '[' + eval(nextRowIndex + 1) + ']');
+
+                newRow = newRow.replaceAll('-' + nextRowIndex, '-' + eval(nextRowIndex + 1));
+
+                nextRowIndex++;
+
+                rows2[i].innerHTML = newRow;
+            }
+            document.getElementById('hdnLastIndex2').value = eval(document.getElementById('hdnLastIndex2').value) + 1;
+            //var nextRowIndex = eval(lastRowIndex) + 1;   // previous index replace by this index
+
 
             // Replace operation end
-
 
             var newRow = table.insertRow();
 
@@ -156,40 +255,86 @@
 
             //delete Button Visible and Invisible
 
-            var btnAddId = btn.id;          // Add Button Id
+            //var btnAddId = btn.id;          // Add Button Id
 
-            var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
+            //var btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnRemove');
 
-            var dltBtn = document.getElementById(btnDeleteId);
+            //var dltBtn = document.getElementById(btnDeleteId);
 
-            dltBtn.classList.add('visible');
+            //dltBtn.classList.add('visible');
 
-            dltBtn.classList.remove('invisible');
+            //dltBtn.classList.remove('invisible');
 
-            var addBtn = document.getElementById(btnAddId);
+            //var addBtn = document.getElementById(btnAddId);
 
-            addBtn.classList.remove('visible');
+            //addBtn.classList.remove('visible');
 
-            addBtn.classList.add('invisible');
+            //addBtn.classList.add('invisible');
 
             // call the jquery validation
-            rebindValidators();
+            //rebindValidators();
         }
 
         // Function for dynamic inserted row client side validation
 
-        function rebindValidators(){
+        //function rebindValidators() {
 
-            var $form = $("#TestConfigForm");  // formId
+        //    var $form = $("#TestConfigForm");  // formId
 
-            $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
+        //    $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
 
-            $form.data("validator", null);  // this will clear all the validators from the form
+        //    $form.data("validator", null);  // this will clear all the validators from the form
 
-            $.validator.unobtrusive.parse($form);  // this will add the validators to the form again
+        //    $.validator.unobtrusive.parse($form);  // this will add the validators to the form again
 
-            $form.validate($form.data("unobtrusiveValidation"),options);
+        //    $form.validate($form.data("unobtrusiveValidation"), options);
+        //}
+
+    </script>
+    <script>
+        function addItemHsc(btn) {
+            var table = document.getElementById('ExpTable2');
+
+            var rows = table.getElementsByTagName('tr');
+
+            var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+            // Replace operation
+
+            var lastRowIndex = document.getElementById('hdnLastIndex2').value;  // for change the last added row's attribute index
+
+            var nextRowIndex = eval(lastRowIndex) + 1;   // previous index replace by this index
+
+            document.getElementById('hdnLastIndex2').value = nextRowIndex;
+
+            rowOuterHtml = rowOuterHtml.replaceAll('_' + lastRowIndex + '_', '_' + nextRowIndex + '_');
+
+            rowOuterHtml = rowOuterHtml.replaceAll('[' + lastRowIndex + ']', '[' + nextRowIndex + ']');
+
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastRowIndex, '-' + nextRowIndex);
+
+            var newRow = table.insertRow();
+
+            newRow.innerHTML = rowOuterHtml;
         }
 
+        function deleteItemHsc(btn) {
+
+            var table = document.getElementById('ExpTable2');
+
+            var rows = table.getElementsByTagName('tr');
+
+            if (rows.length == 2) {
+                alert("This Row Cannot be Deleted");
+                return;
+            }
+
+            $(btn).closest('tr').hide();
+        };
+
+
+        function openCongratesModel(msg){
+            $('#congratesModal').modal('show');
+        }
     </script>
     }

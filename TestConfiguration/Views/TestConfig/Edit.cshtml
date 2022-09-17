@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var photoPath = Model.ProfileUrl ?? "noImage.jpg";
 }
 
 <h1>Edit</h1>
@@ -75,6 +76,7 @@
                 </table>
 
             </div>
+            <img src="@photoPath" width="300" height="300" asp-append-version /> 
             <input type="hidden" id="hdnLastIndex" value="0" />
 
             <div class="form-group">
@@ -174,18 +176,18 @@
 
         // Function for dynamic inserted row client side validation
 
-        function rebindValidators() {
+        //function rebindValidators() {
 
-            var $form = $("#TestConfigForm");
+        //    var $form = $("#TestConfigForm");
 
-            $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
+        //    $form.unbind();    // this will remove all the controls of the form from the jquery controls collection
 
-            $form.data("validator", null);  // this will clear all the validators from the form
+        //    $form.data("validator", null);  // this will clear all the validators from the form
 
-            $.validator.unobtrusive.parse($form);  // this will add the validators to the form again
+        //    $.validator.unobtrusive.parse($form);  // this will add the validators to the form again
 
-            $form.validate($form.data("unobtrusiveValidation"), options);
-        }
+        //    $form.validate($form.data("unobtrusiveValidation"), options);
+        //}
 
     </script>
     }
